@@ -1,0 +1,93 @@
+<div class="container mt-5">
+  <!-- Login / Register Form -->
+  <div *ngIf="!currentUser" class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h3 class="card-title mb-4 text-center">Login / Register</h3>
+
+          <form (ngSubmit)="login()">
+            <div class="mb-3">
+              <label class="form-label">Username</label>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="username"
+                name="username"
+                placeholder="Enter username"
+                required
+              />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Date of Birth</label>
+              <input type="date" class="form-control" [(ngModel)]="dob" name="dob" />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Blood Pressure</label>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="bloodPressure"
+                name="bloodPressure"
+                placeholder="e.g. 120/80"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Weight (kg)</label>
+              <input
+                type="number"
+                class="form-control"
+                [(ngModel)]="weight"
+                name="weight"
+                placeholder="Enter weight"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Height (cm)</label>
+              <input
+                type="number"
+                class="form-control"
+                [(ngModel)]="height"
+                name="height"
+                placeholder="Enter height"
+              />
+            </div>
+
+            <div class="d-flex justify-content-between">
+              <button type="button" class="btn btn-primary" (click)="register()">
+                <i class="bi bi-person-plus"></i> Register
+              </button>
+              <button type="button" class="btn btn-success" (click)="login()">
+                <i class="bi bi-box-arrow-in-right"></i> Login
+              </button>
+            </div>
+          </form>
+
+          <p class="text-danger mt-3">{{ message }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Welcome / Signed-in User -->
+  <div *ngIf="currentUser" class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-sm text-center">
+        <div class="card-body">
+          <h3 class="card-title mb-3">Welcome, {{ currentUser.name }}!</h3>
+          <p class="mb-3">
+            Your BMI: <strong>{{ currentUser.bmi }}</strong>
+          </p>
+          <button class="btn btn-danger" (click)="signOut()">
+            <i class="bi bi-box-arrow-left"></i> Sign Out
+          </button>
+          <p class="text-success mt-3">{{ message }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
