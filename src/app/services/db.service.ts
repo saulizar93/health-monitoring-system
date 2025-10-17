@@ -35,4 +35,10 @@ export class DbService {
     const db = await this.dbPromise;
     return db.put('users', user);
   }
+
+  async deleteUser(userOrName: User | string) {
+    const db = await this.dbPromise;
+    const key = typeof userOrName === 'string' ? userOrName : userOrName.name;
+    return db.delete('users', key);
+  }
 }

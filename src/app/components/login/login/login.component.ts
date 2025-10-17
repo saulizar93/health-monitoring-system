@@ -3,6 +3,7 @@ import { User } from '../../../models/user.model';
 import { DbService } from '../../../services/db.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -13,19 +14,14 @@ import { CommonModule } from '@angular/common';
 })
 export class LoginComponent {
   username: string = '';
-  dob: string = '';
-  bloodPressure: string = '';
-  weight: number | null = null;
-  height: number | null = null;
+  password = '';
+  message = '';
 
-  currentUser: User | null = null;
-  message: string = '';
-
-  constructor(private dbService: DbService) {}
+  constructor(private dbService: DbService, private router: Router) {}
 
   async register() {
-    if (!this.username) {
-      this.message = 'Username is required!';
+    if (!this.username || !this.password) {
+      this.message = 'Both username and password are required!';
       return;
     }
 
@@ -35,55 +31,40 @@ export class LoginComponent {
       return;
     }
 
-    const bmi = this.calculateBMI(this.weight || 0, this.height || 0);
-
     const newUser: User = {
       name: this.username,
-      dob: this.dob,
-      bloodPressure: this.bloodPressure,
-      weight: this.weight || 0,
-      height: this.height || 0,
-      bmi,
+      password: this.password,
+      dob: '',
+      bloodPressure: '',
+      weight: 0,
+      height: 0,
+      bmi: 0,
     };
-
     await this.dbService.addUser(newUser);
-    this.currentUser = newUser;
-    this.message = `Registered successfully as ${this.username}`;
-    this.clearForm();
+
+    this.password = '';
+    this.message = 'Registration successful! You can now log in.';
   }
 
   async login() {
-    if (!this.username) {
-      this.message = 'Username is required!';
+    if (!this.username || !this.password) {
+      this.message = 'Both username and password are required!';
       return;
     }
 
     const user = await this.dbService.getUser(this.username);
-    if (user) {
-      this.currentUser = user;
-      this.message = `Welcome back, ${user.name}`;
-      this.clearForm();
-    } else {
-      this.message = 'User not found. Please register first';
+    if (!user) {
+      this.message = 'User not found. Please register first.';
+      return;
     }
-  }
 
-  signOut() {
-    this.currentUser = null;
-    this.message = 'Signed out successfully!';
-  }
+    if (user.password != this.password) {
+      this.message = 'Incorrect password';
+      return;
+    }
 
-  private calculateBMI(weight: number, height: number): number {
-    if (height <= 0) return 0;
-    const heightInMeters = height / 100;
-    return parseFloat((weight / heightInMeters ** 2).toFixed(2));
-  }
+    this.message = `Welcome back, ${user.name}!`;
 
-  private clearForm() {
-    this.username = '';
-    this.dob = '';
-    this.bloodPressure = '';
-    this.weight = null;
-    this.height = null;
+    this.router.navigate(['/metrics'], { state: { user } });
   }
 }
