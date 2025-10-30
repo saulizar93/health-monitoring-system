@@ -22,14 +22,26 @@
 
         <div class="mb-3">
           <label class="form-label">Weight (kg)</label>
-          <input type="number" class="form-control" [(ngModel)]="user.weight" name="weight" (ngModelChange)="onMetricsChanged()" />
+          <input
+            type="number"
+            class="form-control"
+            [(ngModel)]="user.weight"
+            name="weight"
+            (ngModelChange)="onMetricsChanged()"
+          />
         </div>
 
         <div class="mb-3">
           <label class="form-label">Height (cm)</label>
-          <input type="number" class="form-control" [(ngModel)]="user.height" name="height" (ngModelChange)="onMetricsChanged()" />
+          <input
+            type="number"
+            class="form-control"
+            [(ngModel)]="user.height"
+            name="height"
+            (ngModelChange)="onMetricsChanged()"
+          />
         </div>
-        
+
         <div class="d-flex justify-content-between">
           <button type="button" class="btn btn-primary" (click)="save()">
             <i class="bi bi-save"></i> Save
@@ -51,9 +63,11 @@
               <div class="form-control-plaintext fw-semibold">{{ user.bmi }}</div>
             </div>
             <div class="col-auto">
-              <div class="form-control-plaintext fw-semibold"
-                   [ngClass]="getBmiColor(getBmiCategory())">
-                   {{ getBmiCategory(user.bmi) }}
+              <div
+                class="form-control-plaintext fw-semibold"
+                [ngClass]="getBmiColor(getBmiCategory())"
+              >
+                {{ getBmiCategory() }}
               </div>
             </div>
           </div>
