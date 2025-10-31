@@ -1,9 +1,13 @@
+// most calls service methods and User methods
+// logic like BMI calculation is offloaded to the User class
+// Components should focus on UI and orchestration, not business logic
+// Object-Oriented Programming
 import { Component } from '@angular/core';
-import { User } from '../../../models/user.model';
-import { DbService } from '../../../services/db.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { User } from '../../classes/user.class';
+import { DbService } from '../../classes/dbService.class';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +17,7 @@ import { Router } from '@angular/router';
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
-  username: string = '';
+  username = '';
   password = '';
   message = '';
 
@@ -31,15 +35,7 @@ export class LoginComponent {
       return;
     }
 
-    const newUser: User = {
-      name: this.username,
-      password: this.password,
-      dob: '',
-      bloodPressure: '',
-      weight: 0,
-      height: 0,
-      bmi: 0,
-    };
+    const newUser = new User(this.username, this.password);
     await this.dbService.addUser(newUser);
 
     this.password = '';
@@ -58,12 +54,10 @@ export class LoginComponent {
       return;
     }
 
-    if (user.password != this.password) {
+    if (user.password !== this.password) {
       this.message = 'Incorrect password';
       return;
     }
-
-    this.message = `Welcome back, ${user.name}!`;
 
     this.router.navigate(['/metrics'], { state: { user } });
   }
